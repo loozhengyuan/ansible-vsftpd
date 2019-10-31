@@ -1,0 +1,4 @@
+# Only accept FTP connections from these users
+{% for user in vsftpd_users %}
+{{ user }}
+{% endfor %}

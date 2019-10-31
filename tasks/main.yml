@@ -1,0 +1,70 @@
+---
+- name: Install vsftpd
+  apt:
+    name: vsftpd
+    state: latest
+    force_apt_get: yes
+
+- name: Expose relevant ports
+  ufw:
+    rule: allow
+    port: "{{ item }}"
+    proto: tcp
+  loop:
+    - "{{ vsftpd_data_port }}"
+    - "{{ vsftpd_command_port }}"
+    - "{{ vsftpd_tls_port }}"
+    - "{{ vsftpd_pasv_port }}"
+  notify: ufw_reload
+
+- name: Copy config file
+  template:
+    src: vsftpd.conf.j2
+    dest: /etc/vsftpd.conf
+    mode: '0644'
+    backup: yes
+  notify: vsftpd_restart
+
+- name: Copy userlist file
+  template:
+    src: vsftpd.userlist.j2
+    dest: /etc/vsftpd.userlist
+    mode: '0644'
+    backup: yes
+  notify: vsftpd_restart
+
+- name: Add empty shell to /etc/shells
+  lineinfile:
+    path: /etc/shells
+    line: /bin/false
+
+- name: Create ftp users with disabled shell
+  user:
+    name: "{{ item }}"
+    shell: /bin/false
+  loop: "{{ vsftpd_users }}"
+
+# Due to the way vsftpd secures the root directory of the chroot jail,
+# this ftp directory is needednogroup
+- name: Create ftp directory for ftp users
+  file:
+    path: "/home/{{ item }}/ftp"
+    state: directory
+    owner: nobody
+    group: nogroup
+    mode: 0555
+  loop: "{{ vsftpd_users }}"
+
+- name: Create ftp upload directory for ftp users
+  file:
+    path: "/home/{{ item }}/ftp/upload"
+    state: directory
+    owner: "{{ item }}"
+    group: "{{ item }}"
+    mode: 0755
+  loop: "{{ vsftpd_users }}"
+
+- name: Ensure vsftpd started
+  service:
+    name: vsftpd
+    state: started
