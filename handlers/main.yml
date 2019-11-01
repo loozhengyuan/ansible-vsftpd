@@ -1,6 +1,6 @@
 ---
-- name: Restart vsftpd if config changed
+- name: Reload vsftpd if config changed
   service:
     name: vsftpd
-    state: restarted
-  listen: vsftpd_restart
+    state: reloaded
+  listen: vsftpd_reload

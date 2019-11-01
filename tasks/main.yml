@@ -11,7 +11,7 @@
     dest: /etc/vsftpd.conf
     mode: '0644'
     backup: yes
-  notify: vsftpd_restart
+  notify: vsftpd_reload
 
 - name: Copy userlist file
   template:
@@ -19,7 +19,7 @@
     dest: /etc/vsftpd.userlist
     mode: '0644'
     backup: yes
-  notify: vsftpd_restart
+  notify: vsftpd_reload
 
 - name: Add empty shell to /etc/shells
   lineinfile:
