@@ -21,15 +21,10 @@
     backup: yes
   notify: vsftpd_reload
 
-- name: Add empty shell to /etc/shells
-  lineinfile:
-    path: /etc/shells
-    line: /bin/false
-
 - name: Create ftp users with disabled shell
   user:
     name: "{{ item }}"
-    shell: /bin/false
+    shell: /sbin/nologin
   loop: "{{ vsftpd_users }}"
 
 # Due to the way vsftpd secures the root directory of the chroot jail,
