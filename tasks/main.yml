@@ -5,18 +5,6 @@
     state: latest
     force_apt_get: yes
 
-- name: Expose relevant ports
-  ufw:
-    rule: allow
-    port: "{{ item }}"
-    proto: tcp
-  loop:
-    - "{{ vsftpd_data_port }}"
-    - "{{ vsftpd_command_port }}"
-    - "{{ vsftpd_tls_port }}"
-    - "{{ vsftpd_pasv_min_port }}:{{ vsftpd_pasv_max_port }}"
-  notify: ufw_reload
-
 - name: Copy config file
   template:
     src: vsftpd.conf.j2
@@ -63,6 +51,18 @@
     group: "{{ item }}"
     mode: 0755
   loop: "{{ vsftpd_users }}"
+
+- name: Expose relevant ports
+  ufw:
+    rule: allow
+    port: "{{ item }}"
+    proto: tcp
+  loop:
+    - "{{ vsftpd_data_port }}"
+    - "{{ vsftpd_command_port }}"
+    - "{{ vsftpd_tls_port }}"
+    - "{{ vsftpd_pasv_min_port }}:{{ vsftpd_pasv_max_port }}"
+  notify: ufw_reload
 
 - name: Ensure vsftpd started
   service:
