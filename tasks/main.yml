@@ -25,6 +25,7 @@
   user:
     name: "{{ item }}"
     shell: /sbin/nologin
+  when: vsftpd_users | length > 0
   loop: "{{ vsftpd_users }}"
 
 - name: Ensure chroot directory is not writable
@@ -34,6 +35,7 @@
     owner: nobody
     group: nogroup
     mode: 0555
+  when: vsftpd_users | length > 0
   loop: "{{ vsftpd_users }}"
 
 - name: Create ftp upload directory for ftp users
@@ -43,6 +45,7 @@
     owner: "{{ item }}"
     group: "{{ item }}"
     mode: 0755
+  when: vsftpd_users | length > 0
   loop: "{{ vsftpd_users }}"
 
 - name: Expose relevant ports
