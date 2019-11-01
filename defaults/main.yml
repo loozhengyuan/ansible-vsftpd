@@ -3,4 +3,5 @@ vsftpd_users: []
 vsftpd_data_port: "20"
 vsftpd_command_port: "21"
 vsftpd_tls_port: "990"
-vsftpd_pasv_port: "40000:50000"
+vsftpd_pasv_min_port: "40000"
+vsftpd_pasv_max_port: "50000"

@@ -14,7 +14,7 @@
     - "{{ vsftpd_data_port }}"
     - "{{ vsftpd_command_port }}"
     - "{{ vsftpd_tls_port }}"
-    - "{{ vsftpd_pasv_port }}"
+    - "{{ vsftpd_pasv_min_port }}:{{ vsftpd_pasv_max_port }}"
   notify: ufw_reload
 
 - name: Copy config file
