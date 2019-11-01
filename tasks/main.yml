@@ -27,9 +27,7 @@
     shell: /sbin/nologin
   loop: "{{ vsftpd_users }}"
 
-# Due to the way vsftpd secures the root directory of the chroot jail,
-# this ftp directory is needednogroup
-- name: Create ftp directory for ftp users
+- name: Ensure chroot directory is not writable
   file:
     path: "/home/{{ item }}/ftp"
     state: directory
