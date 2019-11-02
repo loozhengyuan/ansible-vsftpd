@@ -58,6 +58,7 @@
   when: vsftpd_users | length > 0
   loop: "{{ vsftpd_users }}"
 
+# TODO: Expose TLS ports when supported by Ansible role
 - name: Expose relevant ports
   ufw:
     rule: allow
@@ -66,7 +67,7 @@
   loop:
     - "{{ vsftpd_data_port }}"
     - "{{ vsftpd_command_port }}"
-    - "{{ vsftpd_tls_port }}"
+    # - "{{ vsftpd_tls_port }}"
     - "{{ vsftpd_pasv_min_port }}:{{ vsftpd_pasv_max_port }}"
   notify: ufw_reload
 
