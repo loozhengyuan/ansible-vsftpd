@@ -21,6 +21,14 @@
     backup: yes
   notify: vsftpd_reload
 
+- name: Copy vsftpd pam file
+  template:
+    src: vsftpd.pam.j2
+    dest: /etc/pam.d/vsftpd
+    mode: '0644'
+    backup: yes
+  notify: vsftpd_reload
+
 - name: Create ftp users with disabled shell
   user:
     name: "{{ item }}"
