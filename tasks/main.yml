@@ -33,6 +33,8 @@
   user:
     name: "{{ item }}"
     shell: /sbin/nologin
+    password: "{{ item | password_hash('sha512') }}"
+    update_password: on_create
   when: vsftpd_users | length > 0
   loop: "{{ vsftpd_users }}"
 
